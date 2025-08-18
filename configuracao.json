@@ -1,4 +1,14 @@
 {
-  MODELO_EDITAL: "/modelos/modelo_conclusao.docx",
-  MODELO_CONCLUSAO: "/modelos/modelo_edital.docx"
+    "arquivo_modelo_conclusao": "./modelos/modelo_conclusao.docx",
+    "arquivo_modelo_edital": "./modelos/modelo_edital.docx",
+    "diretorio_geracao": "C:/Dev/PycharmProjects/geras_apoiamento",
+    "arquivo_planilha_de_projetos": "C:/Dev/PycharmProjects/geras_apoiamento/CONTROLE PROJETOS DE LEI COFFFC 2025.xlsm",
+    "planilha_de_projetos": "CONTROLE DE PL e PROCESSOS",
+    "coluna_numero_projeto": 3,
+    "coluna_ementa": 4,
+    "coluna_autor": 5,
+    "coluna_relatoria": 6,
+    "coluna_reuniao": 9,
+    "filtro_coluna_reuniao": "PRÓXIMA",
+    "url_base": "http://alerjln1.alerj.rj.gov.br"
 }
