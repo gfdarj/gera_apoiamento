@@ -13,4 +13,4 @@ class Proposicao:
         self.relator = ''
         self.autores = None
         self.parecer = None
-
+        self.emenda_de_plenario = False

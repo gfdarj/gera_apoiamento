@@ -29,6 +29,19 @@ class PlanilhaProjetos:
                 proposicao.parecer = linha[self.config.coluna_parecer-1].value
                 proposicao.relator = linha[self.config.coluna_relatoria-1].value
 
+                if "(EP)" in proposicao.numero:
+                    proposicao.numero = proposicao.numero.replace("(EP)", "").strip(" ")
+                    proposicao.emenda_de_plenario = True
+                else:
+                    if "EP" in proposicao.numero:
+                        proposicao.numero = proposicao.numero.replace("EP", "").strip(" ")
+                        proposicao.emenda_de_plenario = True
+
+                num = proposicao.numero.split('/')
+                proposicao.numero = num[0]
+                proposicao.ano = num[-1]
+
+
                 projetos_selecionados.append(proposicao)
 
         #print(f'Projetos selecionadas: {conta}')
