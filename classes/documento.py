@@ -1,7 +1,7 @@
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from proposicao import Proposicao
+from classes.proposicao import Proposicao
 
 def cria_estilo(lista_estilos, nome_estilo, alinhamento, fonte, tamanho, negrito=False, recuo_primeira_linha=None, recuo_esquerda=None):
     '''

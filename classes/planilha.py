@@ -22,12 +22,12 @@ class PlanilhaProjetos:
                 #print()  # Passa para a próxima linha após imprimir todas as células da linha atual
 
                 proposicao = Proposicao()
-                proposicao.tipo_proposicao = linha[self.config.coluna_tipo_projeto-1].value
-                proposicao.numero = linha[self.config.coluna_numero_projeto-1].value
-                proposicao.ementa = linha[self.config.coluna_ementa-1].value
-                proposicao.autores = linha[self.config.coluna_autor-1].value
-                proposicao.parecer = linha[self.config.coluna_parecer-1].value
-                proposicao.relator = linha[self.config.coluna_relatoria-1].value
+                proposicao.tipo_proposicao = linha[self.config.coluna_tipo_projeto-1].value.strip()
+                proposicao.numero = linha[self.config.coluna_numero_projeto-1].value.strip()
+                proposicao.ementa = linha[self.config.coluna_ementa-1].value.strip()
+                proposicao.autores = linha[self.config.coluna_autor-1].value.strip()
+                proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip()
+                proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip()
 
                 if "(EP)" in proposicao.numero:
                     proposicao.numero = proposicao.numero.replace("(EP)", "").strip(" ")

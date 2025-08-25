@@ -13,7 +13,7 @@ class Configuracao:
             with open('./' + nome_arquivo_json, 'r', encoding='utf-8') as arquivo:
                 configuracoes = json.load(arquivo)
                 self.arquivo_modelo_conclusao = configuracoes['arquivo_modelo_conclusao']
-                self.arquivo_modelo_edital = bool(configuracoes['arquivo_modelo_edital'])
+                self.arquivo_modelo_edital = configuracoes['arquivo_modelo_edital']
                 self.diretorio_geracao = configuracoes['diretorio_geracao']
                 self.arquivo_planilha_de_projetos = configuracoes['arquivo_planilha_de_projetos']
                 self.planilha_de_projetos = configuracoes['planilha_de_projetos']
