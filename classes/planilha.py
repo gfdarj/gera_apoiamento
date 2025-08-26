@@ -28,6 +28,7 @@ class PlanilhaProjetos:
                 proposicao.autores = linha[self.config.coluna_autor-1].value.strip()
                 proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip()
                 proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip()
+                proposicao.reuniao = linha[self.config.coluna_reuniao-1].value.strip()
 
                 if "(EP)" in proposicao.numero:
                     proposicao.numero = proposicao.numero.replace("(EP)", "").strip(" ")

@@ -1,6 +1,7 @@
 from classes.proposicao import Proposicao
 from dataclasses import dataclass, asdict
 from datetime import datetime
+from libs import datas
 from pathlib import Path
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
@@ -76,61 +77,33 @@ Classe Conclusao - Classe para as Conclusões dos Projetos de Lei.
 @dataclass
 class Conclusao(Proposicao):
 
-    def gera_documento(self, arquivo_modelo, diretorio_geracao):
+    def gera_documento(self, data_sessao, arquivo_modelo, diretorio_geracao):
         documento = Document(arquivo_modelo)
         estilos = documento.styles
-        # Número do PL e assinatura do Presidente
-        # Fonte Arial 10, negrito
-        # Parágrafo centralizado
-        stl_neg_cent = cria_estilo(estilos, 'estilo_1', WD_ALIGN_PARAGRAPH.CENTER, 'Arial', Pt(10), negrito=True)
-        # Texto em geral e linhas em branco
-        # Fonte Arial 10, normal
-        # Parágrafo justificado, primeira linha com recuo de 1.5 cm
-        stl_norm_just_pl15 = cria_estilo(estilos, 'estilo_3', WD_ALIGN_PARAGRAPH.JUSTIFY, 'Arial', Pt(10), negrito=False, recuo_primeira_linha=Cm(1.5))
-        # Ementa
-        # Fonte Arial 10, negrito
-        # Parágrafo justificado, recuo à esquerda de 6.0 cm
-        stl_neg_just_esq60 = cria_estilo(estilos, 'estilo_4', WD_ALIGN_PARAGRAPH.JUSTIFY, 'Arial', Pt(10), negrito=True, recuo_esquerda=Cm(6.0))
-        # Texto "A ASSEMBLEIA LEGISLATIVA DO ESTADO DO RIO DE JANEIRO" e autoria
-        # Fonte Arial 10, negrito
-        # Parágrafo justificado
-        stl_neg_just = cria_estilo(estilos, 'estilo_5', WD_ALIGN_PARAGRAPH.JUSTIFY, 'Arial', Pt(10), negrito=True)
-        # Texto "R E S O L V E:"
-        # Fonte Arial 10, negrito
-        # Parágrafo alinhado à direita
-        stl_neg_dir = cria_estilo(estilos, 'estilo_6', WD_ALIGN_PARAGRAPH.RIGHT, 'Arial', Pt(10), negrito=True)
-        # Local e data
-        # Fonte Arial 10, normal
-        # Parágrafo centralizado
-        stl_norm_cent = cria_estilo(estilos, 'estilo_7', WD_ALIGN_PARAGRAPH.CENTER, 'Arial', Pt(10), negrito=False)
+
+        stl_norm_just_pl16 = cria_estilo(estilos, 'estilo_1', WD_ALIGN_PARAGRAPH.JUSTIFY, 'Arial', Pt(12), negrito=False, recuo_primeira_linha=Cm(1.6), recuo_esquerda=None)
+
 
         # Geração do documento
         for paragrafo in documento.paragraphs:
             if '{{ NUMERO_PROJETO }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ NUMERO_PROJETO }}', f"{self.numero}/{self.ano}")
-        for paragrafo in documento.paragraphs:
             if '{{ REUNIAO }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ REUNIAO }}', self.reuniao)
-        for paragrafo in documento.paragraphs:
             if '{{ DATA_REUNIAO }}' in paragrafo.text:
-                paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO }}', "")
-
-        for paragrafo in documento.paragraphs:
+                paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO }}', data_sessao)
             if '{{ PARECER }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ PARECER }}', self.parecer)
-
-        for paragrafo in documento.paragraphs:
             if '{{ TIPO_PROPOSICAO }}' in paragrafo.text:
                 if self.emenda_de_plenario:
-                    tipo_proposicao = "Emenda de Plenário ao Projeto de Lei n. "
+                    tipo_proposicao = f"à(s) Emenda(s) de Plenário ao {self.tipo_proposicao}"
                 else:
-                    tipo_proposicao = "Projeto de Lei n. "
+                    tipo_proposicao = f"ao {self.tipo_proposicao}"
                 paragrafo.text = paragrafo.text.replace('{{ TIPO_PROPOSICAO }}', tipo_proposicao)
-
-        for paragrafo in documento.paragraphs:
             if '{{ DATA_REUNIAO_POR_EXTENSO }}' in paragrafo.text:
-                paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO_POR_EXTENSO }}', "data_sessao")
+                paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO_POR_EXTENSO }}', datas.data_por_extenso(data_sessao))
 
+            paragrafo.style = stl_norm_just_pl16
 
         diretorio = Path(diretorio_geracao)
         diretorio.mkdir(parents=True, exist_ok=True)
