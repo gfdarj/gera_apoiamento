@@ -7,7 +7,6 @@ from libs.datas import is_valid_date
 
 if len(sys.argv) > 1:
     data_sessao = sys.argv[1]
-    print(f"Olá, {data_sessao}!")
 
     if is_valid_date(data_sessao, "%d/%m/%Y") or is_valid_date(data_sessao, "%d-%m-%Y"):
 
