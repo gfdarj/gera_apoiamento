@@ -1,7 +1,7 @@
 {
     "arquivo_modelo_conclusao": "./modelos/modelo_conclusao.docx",
     "arquivo_modelo_edital": "./modelos/modelo_edital.docx",
-    "diretorio_geracao": "C:/Dev/PycharmProjects/gera_apoiamento",
+    "diretorio_geracao": "./arquivos_gerados/",
     "arquivo_planilha_de_projetos": "C:/Dev/PycharmProjects/gera_apoiamento/CONTROLE PROJETOS.xlsm",
     "planilha_de_projetos": "CONTROLE DE PL e PROCESSOS",
     "coluna_tipo_projeto": 1,

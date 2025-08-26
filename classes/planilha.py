@@ -44,7 +44,10 @@ class PlanilhaProjetos:
 
                 projetos_selecionados.append(proposicao)
 
-        #print(f'Projetos selecionadas: {conta}')
+        # Ordena as proposições
+        if len(projetos_selecionados) > 0:
+            projetos_selecionados = sorted(projetos_selecionados, key=lambda x: (x.relator, int(x.ano), int(x.numero)))
+
         return projetos_selecionados
 
 

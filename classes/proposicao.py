@@ -1,16 +1,17 @@
+from dataclasses import dataclass
 
 '''
 Classe Proposicao - Classe base para as proposições.
 '''
+@dataclass
 class Proposicao:
-    def __init__(self, numero='', ano=''):
-        self.numero = numero
-        self.ano = ano
-        self.tipo_proposicao = ''
-        self.ementa = ''
-        self.texto = ''
-        self.reuniao = ''
-        self.relator = ''
-        self.autores = None
-        self.parecer = None
-        self.emenda_de_plenario = False
+    numero: str = ''
+    ano: str = ''
+    tipo_proposicao: str = ''
+    ementa: str = ''
+    texto: str = ''
+    reuniao: str = ''
+    relator: str = ''
+    autores: str = None
+    parecer: str = None
+    emenda_de_plenario: bool = False
