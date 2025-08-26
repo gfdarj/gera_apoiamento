@@ -96,9 +96,9 @@ class Conclusao(Proposicao):
                 paragrafo.text = paragrafo.text.replace('{{ PARECER }}', self.parecer)
             if '{{ TIPO_PROPOSICAO }}' in paragrafo.text:
                 if self.emenda_de_plenario:
-                    tipo_proposicao = f"à(s) Emenda(s) de Plenário ao {self.tipo_proposicao}"
+                    tipo_proposicao = f"à(s) Emenda(s) de Plenário ao {self.classifica_tipo_proposicao()}"
                 else:
-                    tipo_proposicao = f"ao {self.tipo_proposicao}"
+                    tipo_proposicao = f"ao {self.classifica_tipo_proposicao()}"
                 paragrafo.text = paragrafo.text.replace('{{ TIPO_PROPOSICAO }}', tipo_proposicao)
             if '{{ DATA_REUNIAO_POR_EXTENSO }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO_POR_EXTENSO }}', datas.data_por_extenso(data_sessao))
@@ -108,7 +108,7 @@ class Conclusao(Proposicao):
         diretorio = Path(diretorio_geracao)
         diretorio.mkdir(parents=True, exist_ok=True)
 
-        nome_arquivo = diretorio_geracao + 'Conclusao ' + self.tipo_proposicao + '_' + self.numero + '-' + self.ano + '.docx'
+        nome_arquivo = diretorio_geracao + 'Conclusao ' + self.classifica_tipo_proposicao(nome_resumido=True) + '_' + self.numero + '-' + self.ano + '.docx'
         documento.save(nome_arquivo)
 
 #        documento.add_paragraph('PROJETO DE LEI', style=stl_neg_cent)

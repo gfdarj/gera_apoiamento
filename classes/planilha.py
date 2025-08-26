@@ -26,7 +26,7 @@ class PlanilhaProjetos:
                 proposicao.numero = linha[self.config.coluna_numero_projeto-1].value.strip()
                 proposicao.ementa = linha[self.config.coluna_ementa-1].value.strip()
                 proposicao.autores = linha[self.config.coluna_autor-1].value.strip()
-                proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip()
+                proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip().upper()
                 proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip()
                 proposicao.reuniao = linha[self.config.coluna_reuniao-1].value.strip()
 
