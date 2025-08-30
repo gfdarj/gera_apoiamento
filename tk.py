@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 from openpyxl.styles.builtins import title
 
@@ -18,19 +19,22 @@ class Application(Frame):
         Frame.__init__(self, master)
         self.msg = Label(self, text="Hello World")
         self.msg.pack ()
-        self.oi = Button (self, text="Oie!", command=self.mensagem)
-        self.oi.pack ()
+        self.btn_edital = Button (self, text="Gerar Edital", command=self.mensagem("ok"))
+        self.btn_edital.pack ()
+        self.btn_conclusao = Button (self, text="Gerar Conclusão", command=self.mensagem("ok"))
+        self.btn_conclusao.pack ()
         self.bye = Button (self, text="Bye", command=self.quit)
         self.bye.pack ()
         self.pack()
 
 
-    def mensagem(self):
-        msg = Message("minha_mensagem")
-        msg.pack()
+    def mensagem(self, msg):
+        messagebox.showinfo("minha_mensagem", msg)
+
 
 
 app = Application()
+app.mensagem("teste")
 app.master.title = "Teste TK"
 app.master.geometry("600x600+300+300")
 
@@ -46,12 +50,11 @@ def salvar(): print ("salvar")
 
 def ajuda() : print ("ajuda")
 
-
 principal=Menu(app)
-arquivo=Menu(principal)
-arquivo.add_command(label="Abrir",command=abrir)
-arquivo.add_command(label="Salvar",command=salvar)
-principal.add_cascade(label="Arquivo",menu=arquivo)
+menu_gerar=Menu(principal)
+menu_gerar.add_command(label="Conclusões",command=abrir)
+menu_gerar.add_command(label="Edital",command=salvar)
+principal.add_cascade(label="Gerar",menu=menu_gerar)
 principal.add_command(label="Ajuda",command=ajuda)
 app.master.configure(menu=principal)
 
