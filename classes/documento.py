@@ -77,7 +77,7 @@ Classe Conclusao - Classe para as Conclusões dos Projetos de Lei.
 @dataclass
 class Conclusao(Proposicao):
 
-    def gera_documento(self, data_sessao, arquivo_modelo, diretorio_geracao):
+    def gera_documento(self, data_sessao, reuniao, arquivo_modelo, diretorio_geracao):
         documento = Document(arquivo_modelo)
         estilos = documento.styles
 
@@ -89,7 +89,7 @@ class Conclusao(Proposicao):
             if '{{ NUMERO_PROJETO }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ NUMERO_PROJETO }}', f"{self.numero}/{self.ano}")
             if '{{ REUNIAO }}' in paragrafo.text:
-                paragrafo.text = paragrafo.text.replace('{{ REUNIAO }}', self.reuniao)
+                paragrafo.text = paragrafo.text.replace('{{ REUNIAO }}', reuniao)  #não estou usando a do configuracao.json !!!
             if '{{ DATA_REUNIAO }}' in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace('{{ DATA_REUNIAO }}', data_sessao)
             if '{{ PARECER }}' in paragrafo.text:
@@ -108,7 +108,10 @@ class Conclusao(Proposicao):
         diretorio = Path(diretorio_geracao)
         diretorio.mkdir(parents=True, exist_ok=True)
 
-        nome_arquivo = diretorio_geracao + 'Conclusao ' + self.classifica_tipo_proposicao(nome_resumido=True) + '_' + self.numero + '-' + self.ano + '.docx'
+        eh_emenda = ""
+        if self.emenda_de_plenario: eh_emenda = "EP "
+
+        nome_arquivo = diretorio_geracao + 'Conclusao ' + eh_emenda + self.classifica_tipo_proposicao(nome_resumido=True) + '_' + self.numero + '-' + self.ano + '.docx'
         documento.save(nome_arquivo)
 
 #        documento.add_paragraph('PROJETO DE LEI', style=stl_neg_cent)
