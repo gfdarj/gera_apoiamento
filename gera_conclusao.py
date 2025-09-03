@@ -12,22 +12,28 @@ if len(sys.argv) > 2:
     if is_valid_date(data_sessao, "%d/%m/%Y") or is_valid_date(data_sessao, "%d-%m-%Y"):
         if reuniao != "":
 
-            # Carrega as proposições
-            print("Teste de execução")
-            P = PlanilhaProjetos()
-            print("Carregando projetos")
-            proposicoes = P.CarregaColunas()
-            print(f"Projetos selecionados: {len(proposicoes)}")
+            try:
+                # Carrega as proposições
+                #print("Teste de execução")
+                P = PlanilhaProjetos()
+                print("Carregando projetos")
+                proposicoes = P.CarregaColunas()
+                print(f"Projetos selecionados: {len(proposicoes)}")
 
-            for d in proposicoes:
-                print(f"relator: {d.relator}  ------ numero:{d.numero}/{d.ano}  ----- EP? {d.emenda_de_plenario}")
+                for d in proposicoes:
+                    print(f"relator: {d.relator}  ------ numero:{d.numero}/{d.ano}  ----- EP? {d.emenda_de_plenario}")
 
-            config = Configuracao()
+                config = Configuracao()
 
-            for proposicao in proposicoes:
-                conclusao = proposicao_para_conclusao(proposicao)
-                conclusao.gera_documento(data_sessao=data_sessao, reuniao=reuniao, arquivo_modelo=config.arquivo_modelo_conclusao,
-                                         diretorio_geracao=config.diretorio_geracao)
+                for proposicao in proposicoes:
+                    conclusao = proposicao_para_conclusao(proposicao)
+                    conclusao.gera_documento(data_sessao=data_sessao, reuniao=reuniao, arquivo_modelo=config.arquivo_modelo_conclusao,
+                                             diretorio_geracao=config.diretorio_geracao)
+
+            except Exception as f:
+                print(f"Ocorreu um erro!\n{f}")
+
+
         else:
             print("Informe a reunião.\n   Ex: python .\\gera_conclusao.py dia-mes-ano 'reunião'")
 

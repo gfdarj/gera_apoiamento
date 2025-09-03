@@ -27,7 +27,10 @@ class Configuracao:
                 self.filtro_coluna_reuniao = configuracoes['filtro_coluna_reuniao']
                 self.url_base = configuracoes['url_base']
 
+        except FileNotFoundError as f:
+            raise Exception(f"Arquivo de configuração não foi encontrado!\nDetalhes: {f}")
+
         except Exception as e:
-            print(f'Erro: {e}')
-            exit(1)
+            print(f'{e}')
+            raise
 
