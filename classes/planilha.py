@@ -49,6 +49,11 @@ class PlanilhaProjetos:
         if len(projetos_selecionados) > 0:
             projetos_selecionados = sorted(projetos_selecionados, key=lambda x: (x.relator, int(x.ano), int(x.numero)))
 
+            indice = 0
+            while indice < len(projetos_selecionados):
+                projetos_selecionados[indice].ordem = indice + 1
+                indice += 1
+
         return projetos_selecionados
 
 

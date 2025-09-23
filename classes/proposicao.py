@@ -5,6 +5,7 @@ Classe Proposicao - Classe base para as proposições.
 '''
 @dataclass
 class Proposicao:
+    ordem: int = None
     numero: str = ''
     ano: str = ''
     tipo_proposicao: str = ''
