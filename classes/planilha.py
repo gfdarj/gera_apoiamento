@@ -3,8 +3,9 @@ from classes.proposicao import Proposicao
 import openpyxl
 
 class PlanilhaProjetos:
-    def __init__(self):
+    def __init__(self, ordem_inicial):
         self.config = Configuracao()
+        self._ordem_inicial = int(ordem_inicial)
 
     def CarregaColunas(self):
         projetos_selecionados = []
@@ -51,10 +52,24 @@ class PlanilhaProjetos:
 
             indice = 0
             while indice < len(projetos_selecionados):
-                projetos_selecionados[indice].ordem = indice + 1
+                projetos_selecionados[indice].ordem = self._ordem_inicial
                 indice += 1
+                self._ordem_inicial += 1
 
         return projetos_selecionados
+
+
+    def AtualizaOrdemNosProjetos(self, proposicoes):
+        workbook = openpyxl.load_workbook(self.config.arquivo_planilha_de_projetos, keep_vba=True)
+        planilha = workbook[self.config.planilha_de_projetos]
+
+        conta = 0
+        #for proposicao in proposicoes:
+
+
+        return "~"
+
+
 
 
 '''

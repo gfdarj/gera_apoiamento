@@ -39,7 +39,7 @@ Classe ProjetoLei - Classe para os Projetos de Lei.
 '''
 @dataclass
 class Edital(Proposicao):
-    lista_proposicoes: list = None
+    lista_proposicoes: list = None   # Ao usar o @dataclass não preciso da rotina _init_
 
     def gera_documento(self, arquivo_modelo, diretorio_geracao):
         try:
