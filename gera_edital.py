@@ -24,13 +24,13 @@ if len(sys.argv) <= 2:
         for d in proposicoes:
             print(f"relator: {d.relator}  ------ ordem: {d.ordem}  ------ numero:{d.numero}/{d.ano}  ----- EP? {d.emenda_de_plenario}")
 
-        quit()
-
-
         config = Configuracao()
 
         edital = Edital(lista_proposicoes=proposicoes)
         edital.gera_documento(arquivo_modelo=config.arquivo_modelo_edital, diretorio_geracao=config.diretorio_geracao)
+
+        #GRAVA A ORDEM DOS PROJETOS NA PLANILHA
+        P.AtualizaOrdemNosProjetos(proposicoes)
 
     else:
         print("O parâmetro deve ser um número inteiro!\n   Ex: python .\\gera_edital.py 1")

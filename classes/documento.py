@@ -51,7 +51,6 @@ class Edital(Proposicao):
             # Parágrafo justificado, primeira linha com recuo de 1.6 cm
             stl_norm_just_pl16 = cria_estilo(estilos, 'estilo_1', WD_ALIGN_PARAGRAPH.JUSTIFY, 'Arial', Pt(12), negrito=False, recuo_primeira_linha=Cm(1.6), recuo_esquerda=None)
 
-            linha = 1
             relator = ""
             for proposicao in self.lista_proposicoes:
 
@@ -60,12 +59,15 @@ class Edital(Proposicao):
                     documento.add_paragraph(f"Relator: {proposicao.relator}", style=stl_norm_just_pl16)
                     documento.add_paragraph('', style=stl_norm_just_pl16)
 
-                texto = f"{linha}) {'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}{proposicao.numero}/{proposicao.ano}"
+                texto = f"{proposicao.ordem}) {'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}{proposicao.numero}/{proposicao.ano}"
                 texto += f", do(s) Deputado(s) {proposicao.autores.title()}, que {proposicao.ementa}{"" if proposicao.ementa[-1] == "." else "."}"
                 documento.add_paragraph(texto, style=stl_norm_just_pl16)
                 documento.add_paragraph('', style=stl_norm_just_pl16)
-                linha += 1
                 relator = proposicao.relator
+
+
+            diretorio = Path(diretorio_geracao)
+            diretorio.mkdir(parents=True, exist_ok=True)
 
             data_formatada = datetime.today().strftime('%Y%m%d_%H%M%S')
             nome_arquivo = f"edital_{data_formatada}.docx"

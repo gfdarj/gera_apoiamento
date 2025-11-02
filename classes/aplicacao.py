@@ -18,6 +18,7 @@ class Configuracao:
                 self.arquivo_planilha_de_projetos = configuracoes['arquivo_planilha_de_projetos']
                 self.planilha_de_projetos = configuracoes['planilha_de_projetos']
                 self.coluna_tipo_projeto = configuracoes['coluna_tipo_projeto']
+                self.coluna_ordem = configuracoes['coluna_ordem']
                 self.coluna_numero_projeto = configuracoes['coluna_numero_projeto']
                 self.coluna_ementa = configuracoes['coluna_ementa']
                 self.coluna_autor = configuracoes['coluna_autor']
@@ -26,6 +27,8 @@ class Configuracao:
                 self.coluna_reuniao = configuracoes['coluna_reuniao']
                 self.filtro_coluna_reuniao = configuracoes['filtro_coluna_reuniao']
                 self.url_base = configuracoes['url_base']
+                self.presidente_comissao = configuracoes['presidente_comissao']
+
 
         except FileNotFoundError as f:
             raise Exception(f"Arquivo de configuração não foi encontrado!\nDetalhes: {f}")
