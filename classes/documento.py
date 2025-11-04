@@ -59,6 +59,12 @@ class Edital(Proposicao):
                     documento.add_paragraph(f"Relator: {proposicao.relator}", style=stl_norm_just_pl16)
                     documento.add_paragraph('', style=stl_norm_just_pl16)
 
+                ## # Parágrafo com parte normal e parte link
+                ## p = doc.add_paragraph("Visite o site oficial do ")
+                ## add_hyperlink(p, "Python", "https://www.python.org")
+                ## p.add_run(" para aprender mais sobre a linguagem.")
+
+
                 texto = f"{proposicao.ordem}) {'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}{proposicao.numero}/{proposicao.ano}"
                 texto += f", do(s) Deputado(s) {proposicao.autores.title()}, que {proposicao.ementa}{"" if proposicao.ementa[-1] == "." else "."}"
                 documento.add_paragraph(texto, style=stl_norm_just_pl16)
