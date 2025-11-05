@@ -1,8 +1,12 @@
 from classes.aplicacao import Configuracao
 from classes.planilha import PlanilhaProjetos
 from classes.documento import Edital
-import sys
 
+
+### Coloquei essa linha para que o projeto "veja", na hora de gerar o executável, o pacote de acesso ao
+### banco de dados que está no mesmo nível de diretório que este projeto
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'proposicoes_bd')))
 
 if len(sys.argv) <= 2:
 
