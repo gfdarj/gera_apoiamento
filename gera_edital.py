@@ -27,7 +27,7 @@ if len(sys.argv) <= 2:
         config = Configuracao()
 
         edital = Edital(lista_proposicoes=proposicoes)
-        edital.gera_documento(arquivo_modelo=config.arquivo_modelo_edital, diretorio_geracao=config.diretorio_geracao)
+        edital.gera_documento(arquivo_modelo=config.arquivo_modelo_edital, diretorio_geracao=config.diretorio_geracao, banco_dados_proposicoes=config.banco_dados_proposicoes)
 
         #GRAVA A ORDEM DOS PROJETOS NA PLANILHA
         P.AtualizaOrdemNosProjetos(proposicoes)

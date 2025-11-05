@@ -28,6 +28,7 @@ class Configuracao:
                 self.filtro_coluna_reuniao = configuracoes['filtro_coluna_reuniao']
                 self.url_base = configuracoes['url_base']
                 self.presidente_comissao = configuracoes['presidente_comissao']
+                self.banco_dados_proposicoes = configuracoes['banco_dados_proposicoes']
 
 
         except FileNotFoundError as f:
