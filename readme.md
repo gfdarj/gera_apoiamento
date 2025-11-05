@@ -20,5 +20,8 @@ Estou usando (tentando) o pacote "proposicoes_bd"
 # Gera o executável incluindo manualmente o pacote
 pyinstaller --onefile --hidden-import=proposicoes_bd gera_edital.py
 
+# Está no mesmo nivel da pasta que o projeto
+pyinstaller --onefile --hidden-import=proposicoes_bd --paths=../proposicoes_bd gera_edital.py
+
 
 
