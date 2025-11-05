@@ -1,5 +1,4 @@
-AUXÍLIO NA COMISSÃO PARA GERAR EDITAL E CONCLUSAO A PARTIR DE UMA PLANILHA PREENCHIDA COM DADOS DOS PROJETOS DE LEI
-
+# AUXÍLIO NA COMISSÃO PARA GERAR EDITAL E CONCLUSAO A PARTIR DE UMA PLANILHA PREENCHIDA COM DADOS DOS PROJETOS DE LEI
 
 
 Como instalar os requisitos:
@@ -22,6 +21,7 @@ pyinstaller --onefile --hidden-import=proposicoes_bd gera_edital.py
 
 # Está no mesmo nivel da pasta que o projeto
 pyinstaller --onefile --hidden-import=proposicoes_bd --paths=../proposicoes_bd gera_edital.py
+
 
 
 
