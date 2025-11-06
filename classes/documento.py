@@ -29,6 +29,7 @@ def cria_estilo(lista_estilos, nome_estilo, alinhamento, fonte, tamanho, negrito
 @dataclass
 class Edital(Proposicao):
     lista_proposicoes: list = None
+    usar_link: bool = True
 
     def gera_documento(self, arquivo_modelo, diretorio_geracao, banco_dados_proposicoes):
         try:
@@ -54,25 +55,33 @@ class Edital(Proposicao):
                     documento.add_paragraph(f"Relator: {proposicao.relator}", style=stl_norm_just_pl16)
                     documento.add_paragraph('', style=stl_norm_just_pl16)
 
-
                 numero_formatado = f"{proposicao.numero}/{proposicao.ano}"
-                registro_db = db.seleciona_formatado( numero_formatado)
 
-                if registro_db == None:
-                    link = "www.alerj.rj.gov.br"
+                if self.usar_link:
+                    registro_db = db.seleciona_formatado( numero_formatado)
+
+                    if registro_db == None:
+                        link = "www.alerj.rj.gov.br"
+                    else:
+                        link = registro_db[7]  #COLUNA LINK
+
+                    p = documento.add_paragraph(f"{proposicao.ordem}) ", style=stl_norm_just_pl16)
+                    texto_link = (
+                        f"{'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}" + numero_formatado
+                    )
+                    self.add_hyperlink(p, texto_link, link)
+
+                    p.add_run(
+                        f", do(s) Deputado(s) {proposicao.autores.title()}, que "
+                        f"{proposicao.ementa}{'' if proposicao.ementa.endswith('.') else '.'}"
+                    )
                 else:
-                    link = registro_db[7]  #COLUNA LINK
-
-                p = documento.add_paragraph(f"{proposicao.ordem}) ", style=stl_norm_just_pl16)
-                texto_link = (
-                    f"{'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}" + numero_formatado
-                )
-                self.add_hyperlink(p, texto_link, link)
-
-                p.add_run(
-                    f", do(s) Deputado(s) {proposicao.autores.title()}, que "
-                    f"{proposicao.ementa}{'' if proposicao.ementa.endswith('.') else '.'}"
-                )
+                    texto_link = (f"{'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}" + numero_formatado)
+                    p = documento.add_paragraph(f"{proposicao.ordem}) {texto_link}", style=stl_norm_just_pl16)
+                    p.add_run(
+                        f", do(s) Deputado(s) {proposicao.autores.title()}, que "
+                        f"{proposicao.ementa}{'' if proposicao.ementa.endswith('.') else '.'}"
+                    )
 
                 documento.add_paragraph('', style=stl_norm_just_pl16)
                 relator_anterior = proposicao.relator
