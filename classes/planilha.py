@@ -9,6 +9,9 @@ class PlanilhaProjetos:
 
     def CarregaColunas(self):
         projetos_selecionados = []
+
+        print(f"XLS :::: {self.config.arquivo_planilha_de_projetos}")
+
         workbook = openpyxl.load_workbook(self.config.arquivo_planilha_de_projetos, keep_vba=True)
         planilha = workbook[self.config.planilha_de_projetos]
 

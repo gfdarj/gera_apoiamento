@@ -26,5 +26,8 @@
       pyinstaller --onefile --hidden-import=proposicoes_bd --paths=../proposicoes_bd gera_edital.py
 
 
+* Gerei a interface gráfica sem o console aparecendo e incluindo a subpasta "modelos"
+     
+      pyinstaller --onefile --noconsole --hidden-import=proposicoes_bd --paths=../proposicoes_bd  --add-data "modelos;modelos" tk.py
 
 
