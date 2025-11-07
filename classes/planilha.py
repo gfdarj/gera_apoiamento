@@ -3,7 +3,7 @@ from classes.proposicao import Proposicao
 import openpyxl
 
 class PlanilhaProjetos:
-    def __init__(self, ordem_inicial):
+    def __init__(self, ordem_inicial = 1):
         self.config = Configuracao()
         self._ordem_inicial = int(ordem_inicial)
 
@@ -30,8 +30,8 @@ class PlanilhaProjetos:
                 proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip().upper()
                 proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip().upper()
                 proposicao.reuniao = linha[self.config.coluna_reuniao-1].value.strip()
-                proposicao.relator_vista = linha[self.config.coluna_relatoria_vista-1].value.strip()
-                proposicao.parecer_vista = linha[self.config.coluna_parecer_vista-1].value.strip()
+                proposicao.relator_vista = linha[self.config.coluna_relatoria_vista-1].value
+                proposicao.parecer_vista = linha[self.config.coluna_parecer_vista-1].value
 
                 proposicao.linha_da_planilha = linha[0].row  #ARMAZENO A LINHA PARA DEPOIS ATUALIZAR A ORDEM NO EDITAL
 

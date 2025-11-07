@@ -109,7 +109,9 @@ class Conclusao(Proposicao):
     def gera_documento(self, data_sessao, reuniao):
         try:
 
-            if self.parecer_vista and self.relator_vista:
+            tem_vista = self.parecer_vista and self.relator_vista
+
+            if tem_vista:
                 documento = Document(self.arquivo_modelo_voto_separado)
             else:
                 documento = Document(self.arquivo_modelo)
@@ -128,8 +130,8 @@ class Conclusao(Proposicao):
                     .replace('{{ REUNIAO }}', reuniao)
                     .replace('{{ DATA_REUNIAO }}', data_sessao)
                     .replace('{{ PARECER }}', self.parecer or "")
-                    .replace('{{RELATOR_VOTO_SEPARADO}}', self.relator_vista or "")
-                    .replace('{{PARECER_VOTO_SEPARADO}}', self.parecer_vista or "")
+                    .replace('{{ RELATOR_VOTO_SEPARADO }}', self.relator_vista or "")
+                    .replace('{{ PARECER_VOTO_SEPARADO }}', self.parecer_vista or "")
                 )
 
                 if '{{ TIPO_PROPOSICAO }}' in paragrafo.text:
@@ -154,8 +156,14 @@ class Conclusao(Proposicao):
             eh_emenda = "EP " if self.emenda_de_plenario else ""
             nome_arquivo = (
                 f"Conclusao {eh_emenda}{self.classifica_tipo_proposicao(True)}_"
-                f"{self.numero}-{self.ano}.docx"
+                f"{self.numero}-{self.ano}"
             )
+
+            if tem_vista:
+                nome_arquivo += "_voto_separado.docx"
+            else:
+                nome_arquivo += ".docx"
+
             caminho_arquivo = diretorio / nome_arquivo
             documento.save(caminho_arquivo)
 
