@@ -102,9 +102,18 @@ class Edital(Proposicao):
 
 @dataclass
 class Conclusao(Proposicao):
-    def gera_documento(self, data_sessao, reuniao, arquivo_modelo, diretorio_geracao):
+    arquivo_modelo: str = ""
+    arquivo_modelo_voto_separado: str = ""
+    diretorio_geracao: str = ""
+
+    def gera_documento(self, data_sessao, reuniao):
         try:
-            documento = Document(arquivo_modelo)
+
+            if self.parecer_vista and self.relator_vista:
+                documento = Document(self.arquivo_modelo_voto_separado)
+            else:
+                documento = Document(self.arquivo_modelo)
+
             estilos = documento.styles
 
             stl_norm_just_pl16 = cria_estilo(
@@ -119,6 +128,8 @@ class Conclusao(Proposicao):
                     .replace('{{ REUNIAO }}', reuniao)
                     .replace('{{ DATA_REUNIAO }}', data_sessao)
                     .replace('{{ PARECER }}', self.parecer or "")
+                    .replace('{{RELATOR_VOTO_SEPARADO}}', self.relator_vista or "")
+                    .replace('{{PARECER_VOTO_SEPARADO}}', self.parecer_vista or "")
                 )
 
                 if '{{ TIPO_PROPOSICAO }}' in paragrafo.text:
@@ -137,7 +148,7 @@ class Conclusao(Proposicao):
 
                 paragrafo.style = stl_norm_just_pl16
 
-            diretorio = Path(diretorio_geracao)
+            diretorio = Path(self.diretorio_geracao)
             diretorio.mkdir(parents=True, exist_ok=True)
 
             eh_emenda = "EP " if self.emenda_de_plenario else ""

@@ -18,6 +18,9 @@ class Proposicao:
     parecer: str = None
     emenda_de_plenario: bool = False
     linha_da_planilha: int = None
+    relator_vista: str = None
+    parecer_vista: str = None
+
 
     def classifica_tipo_proposicao(self, nome_resumido=False):
         if (

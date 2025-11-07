@@ -1,5 +1,6 @@
 {
     "arquivo_modelo_conclusao": "./modelos/modelo_conclusao.docx",
+    "arquivo_modelo_conclusao_voto_separado": "./modelos/modelo_conclusao_voto_separado.docx",
     "arquivo_modelo_edital": "./modelos/modelo_edital.docx",
     "diretorio_geracao": "./arquivos_gerados/",
     "arquivo_planilha_de_projetos": "./CONTROLE PROJETOS.xlsm",
@@ -12,6 +13,8 @@
     "coluna_autor": 5,
     "coluna_relatoria": 6,
     "coluna_reuniao": 9,
+    "coluna_relatoria_vista": 14,
+    "coluna_parecer_vista": 15,
     "filtro_coluna_reuniao": "PRÓXIMA",
     "url_base": "http://alerjln1.alerj.rj.gov.br",
     "presidente_comissao": "ANDRÉ CORRÊA",

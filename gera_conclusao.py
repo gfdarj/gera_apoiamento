@@ -1,45 +1,62 @@
+import argparse
 from classes.aplicacao import Configuracao
 from classes.planilha import PlanilhaProjetos
-from classes.documento import cria_estilo, Edital, Conclusao, proposicao_para_conclusao
-import sys
+from classes.documento import Edital, Conclusao, proposicao_para_conclusao
 from libs.datas import is_valid_date
 
 
-if len(sys.argv) > 2:
-    data_sessao = sys.argv[1]
-    reuniao = sys.argv[2]
+def main(data_sessao: str, reuniao: str):
+    # Validação manual adicional (além do argparse)
+    if not (is_valid_date(data_sessao, "%d/%m/%Y") or is_valid_date(data_sessao, "%d-%m-%Y")):
+        print("❌ A data informada está incorreta. Use o formato DD/MM/AAAA ou DD-MM-AAAA.")
+        return
 
-    if is_valid_date(data_sessao, "%d/%m/%Y") or is_valid_date(data_sessao, "%d-%m-%Y"):
-        if reuniao != "":
+    if not reuniao:
+        print("❌ O campo de reunião é obrigatório.")
+        return
 
-            try:
-                # Carrega as proposições
-                #print("Teste de execução")
-                P = PlanilhaProjetos()
-                print("Carregando projetos")
-                proposicoes = P.CarregaColunas()
-                print(f"Projetos selecionados: {len(proposicoes)}")
+    try:
+        # Carrega os projetos
+        print("📂 Carregando projetos...")
+        P = PlanilhaProjetos()
+        proposicoes = P.CarregaColunas()
+        print(f"✅ Projetos carregados: {len(proposicoes)}")
 
-                for d in proposicoes:
-                    print(f"relator: {d.relator}  ------ numero:{d.numero}/{d.ano}  ----- EP? {d.emenda_de_plenario}")
+        for d in proposicoes:
+            print(f"Relator: {d.relator}  ------ número:{d.numero}/{d.ano}  ----- EP? {d.emenda_de_plenario}")
 
-                config = Configuracao()
+        # Gera conclusões
+        config = Configuracao()
+        for proposicao in proposicoes:
+            conclusao = proposicao_para_conclusao(proposicao)
+            conclusao.arquivo_modelo = config.arquivo_modelo_conclusao
+            conclusao.arquivo_modelo_voto_separado = config.arquivo_modelo_conclusao_vovo_separado
+            conclusao.diretorio_geracao = config.diretorio_geracao
+            conclusao.gera_documento(
+                data_sessao=data_sessao,
+                reuniao=reuniao
+            )
 
-                for proposicao in proposicoes:
-                    conclusao = proposicao_para_conclusao(proposicao)
-                    conclusao.gera_documento(data_sessao=data_sessao, reuniao=reuniao, arquivo_modelo=config.arquivo_modelo_conclusao,
-                                             diretorio_geracao=config.diretorio_geracao)
+        print("✅ Conclusões geradas com sucesso.")
 
-            except Exception as f:
-                print(f"Ocorreu um erro!\n{f}")
+    except Exception as e:
+        print(f"❌ Ocorreu um erro:\n{e}")
 
 
-        else:
-            print("Informe a reunião.\n   Ex: python .\\gera_conclusao.py dia-mes-ano 'reunião'")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Gera as conclusões das proposições (Projetos de Lei)."
+    )
+    parser.add_argument(
+        "data_sessao",
+        type=str,
+        help="Data da sessão (formato DD/MM/AAAA ou DD-MM-AAAA)."
+    )
+    parser.add_argument(
+        "reuniao",
+        type=str,
+        help="Identificação da reunião (ex: '1ª Reunião Extraordinária')."
+    )
 
-    else:
-        print("A data informada está errada.\n   Ex: python .\\gera_conclusao.py dia-mes-ano 'reunião'")
-
-else:
-    print("Informe a Data da Sessão!\n   Ex: python .\\gera_conclusao.py dia-mes-ano 'reunião'")
-
+    args = parser.parse_args()
+    main(args.data_sessao, args.reuniao)

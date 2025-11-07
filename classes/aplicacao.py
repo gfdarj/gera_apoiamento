@@ -13,6 +13,7 @@ class Configuracao:
             with open('./' + nome_arquivo_json, 'r', encoding='utf-8') as arquivo:
                 configuracoes = json.load(arquivo)
                 self.arquivo_modelo_conclusao = configuracoes['arquivo_modelo_conclusao']
+                self.arquivo_modelo_conclusao_vovo_separado = configuracoes['arquivo_modelo_conclusao_voto_separado']
                 self.arquivo_modelo_edital = configuracoes['arquivo_modelo_edital']
                 self.diretorio_geracao = configuracoes['diretorio_geracao']
                 self.arquivo_planilha_de_projetos = configuracoes['arquivo_planilha_de_projetos']
@@ -29,6 +30,8 @@ class Configuracao:
                 self.url_base = configuracoes['url_base']
                 self.presidente_comissao = configuracoes['presidente_comissao']
                 self.banco_dados_proposicoes = configuracoes['banco_dados_proposicoes']
+                self.coluna_parecer_vista = configuracoes['coluna_parecer_vista']
+                self.coluna_relatoria_vista = configuracoes['coluna_relatoria_vista']
 
 
         except FileNotFoundError as f:

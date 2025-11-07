@@ -30,6 +30,9 @@ class PlanilhaProjetos:
                 proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip().upper()
                 proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip().upper()
                 proposicao.reuniao = linha[self.config.coluna_reuniao-1].value.strip()
+                proposicao.relator_vista = linha[self.config.coluna_relatoria_vista-1].value.strip()
+                proposicao.parecer_vista = linha[self.config.coluna_parecer_vista-1].value.strip()
+
                 proposicao.linha_da_planilha = linha[0].row  #ARMAZENO A LINHA PARA DEPOIS ATUALIZAR A ORDEM NO EDITAL
 
                 if "(EP)" in proposicao.numero:
