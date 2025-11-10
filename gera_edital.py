@@ -13,12 +13,16 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'p
 #
 # TESTA OS PARAMETROS
 #
-def main(numero_inicial: int, tipo: str):
+def main(numero_inicial: int, tipo: str, ordenacao: str):
     if not tipo:
         tipo = "link"
 
+    if not ordenacao:
+        ordenacao = "comum"
+
     print(f"Número inicial: {numero_inicial}")
     print(f"Tipo: {tipo}")
+    print(f"Ordenação: {ordenacao}")
 
     IsOK = True
 
@@ -31,6 +35,14 @@ def main(numero_inicial: int, tipo: str):
         print("Tipo inválido! Use 'texto' ou 'link'.")
         IsOK = False
 
+    if ordenacao == "comum":
+        print("Gerando edital com ordenação padrão...")
+    elif ordenacao == "nenhuma":
+        print("Gerando edital sem NENHUMA ordenação...")
+    else:
+        print("Ordenação inválida! Use 'comum' ou 'nenhuma'.")
+        IsOK = False
+
     return IsOK
 
 
@@ -40,16 +52,18 @@ if __name__ == "__main__":
                         help="Número inicial das proposições (inteiro). Padrão = 1")
     parser.add_argument("tipo", nargs="?", type=str, choices=["texto", "link"],
                         help="Tipo de saída ('texto' ou 'link'). Padrão = 'link'")
+    parser.add_argument("ordenacao", nargs="?", type=str, choices=["comum", "nenhuma"],
+                        help="Tipo de ordenação ('comum' ou 'nenhuma'). Padrão = 'comum'")
 
     args = parser.parse_args()
 
-    if main(args.numero_inicial, args.tipo or ""):
+    if main(args.numero_inicial, args.tipo or "", args.ordenacao or ""):
 
         ordem_inicial = args.numero_inicial
 
         # Carrega as proposições
         print("Teste de execução")
-        P = PlanilhaProjetos(ordem_inicial=int(ordem_inicial))
+        P = PlanilhaProjetos(ordem_inicial=int(ordem_inicial), ordenacao=args.ordenacao)
         print("Carregando projetos")
         proposicoes = P.CarregaColunas()
         print(f"Projetos selecionados: {len(proposicoes)}")

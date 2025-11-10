@@ -3,9 +3,11 @@ from classes.proposicao import Proposicao
 import openpyxl
 
 class PlanilhaProjetos:
-    def __init__(self, ordem_inicial = 1):
+    def __init__(self, ordem_inicial = 1, ordenacao = "comum"):
         self.config = Configuracao()
         self._ordem_inicial = int(ordem_inicial)
+        self._ordenacao = str(ordenacao).lower()
+
 
     def CarregaColunas(self):
         projetos_selecionados = []
@@ -53,24 +55,32 @@ class PlanilhaProjetos:
 
                 projetos_selecionados.append(proposicao)
 
-        # Ordena as proposições
+        # Numera e Ordena as proposições
         if len(projetos_selecionados) > 0:
-            ##### projetos_selecionados = sorted(projetos_selecionados, key=lambda x: (x.relator, int(x.ano), int(x.numero)))
 
-            presidente_comissao = self.config.presidente_comissao  # nome do relator/presidente da comissão que deve ficar no topo
+            # Ordena as proposições de acordo com o parametro escolhido
+            if self._ordenacao != "nenhuma":
+                ##### projetos_selecionados = sorted(projetos_selecionados, key=lambda x: (x.relator, int(x.ano), int(x.numero)))
 
-            projetos_selecionados = sorted(
-                projetos_selecionados,
-                key=lambda x: (
-                    0 if (x.relator or "").strip().upper() == presidente_comissao.upper() else 1,  # prioridade
-                    (x.relator or "").strip().upper(),  # relator normal
-                    int(x.ano) if str(x.ano).isdigit() else 0,
-                    int(x.numero) if str(x.numero).isdigit() else 0
+                presidente_comissao = self.config.presidente_comissao  # nome do relator/presidente da comissão que deve ficar no topo
+
+                projetos_selecionados = sorted(
+                    projetos_selecionados,
+                    key=lambda x: (
+                        0 if (x.relator or "").strip().upper() == presidente_comissao.upper() else 1,  # prioridade
+                        (x.relator or "").strip().upper(),  # relator normal
+                        int(x.ano) if str(x.ano).isdigit() else 0,
+                        int(x.numero) if str(x.numero).isdigit() else 0
+                    )
                 )
-            )
 
             indice = 0
             while indice < len(projetos_selecionados):
+                # LIMPO O RELATOR POIS NÃO QUERO QUE A LOGICA DE SEPARAR POR RELATOR FUNCIONE.
+                # NAO FAZ MUITO SENTIDO JÁ QUE VAI LER A ORDEM QUE ESTÃ NA PLANILHA DIRETO.
+                if self._ordenacao == "nenhuma":
+                    projetos_selecionados[indice].relator = ""
+
                 projetos_selecionados[indice].ordem = self._ordem_inicial
                 indice += 1
                 self._ordem_inicial += 1
