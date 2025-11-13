@@ -22,7 +22,7 @@ class PlanilhaProjetos:
             if linha[2].value == None and conta > 1:
                 break
 
-            if linha[self.config.coluna_reuniao-1].value == self.config.filtro_coluna_reuniao:
+            if (linha[self.config.coluna_reuniao-1].value == self.config.filtro_coluna_reuniao) or (self.config.filtro_coluna_reuniao == ""):
                 conta += 1
                 #print(f"col0: {linha[self.config.coluna_tipo_projeto-1].value} \ncol1: {linha[self.config.coluna_numero_projeto-1].value} \ncol2: {linha[self.config.coluna_autor-1].value} \n col3: {linha[3].value}\n col4: {linha[4].value}")
                 #print()  # Passa para a próxima linha após imprimir todas as células da linha atual
@@ -30,13 +30,13 @@ class PlanilhaProjetos:
                 proposicao = Proposicao()
                 proposicao.tipo_proposicao = str(linha[self.config.coluna_tipo_projeto-1].value).strip()
                 proposicao.numero = str(linha[self.config.coluna_numero_projeto-1].value).strip()
-                proposicao.ementa = linha[self.config.coluna_ementa-1].value.strip()
-                proposicao.autores = linha[self.config.coluna_autor-1].value.strip().upper()
-                proposicao.parecer = linha[self.config.coluna_parecer-1].value.strip().upper()
-                proposicao.relator = linha[self.config.coluna_relatoria-1].value.strip().upper()
-                proposicao.reuniao = linha[self.config.coluna_reuniao-1].value.strip()
-                proposicao.relator_vista = linha[self.config.coluna_relatoria_vista-1].value
-                proposicao.parecer_vista = linha[self.config.coluna_parecer_vista-1].value
+                proposicao.ementa = str(linha[self.config.coluna_ementa-1].value).strip()
+                proposicao.autores = str(linha[self.config.coluna_autor-1].value).strip().upper()
+                proposicao.parecer = str(linha[self.config.coluna_parecer-1].value).upper().strip()
+                proposicao.relator = str(linha[self.config.coluna_relatoria-1].value).strip().upper()
+                proposicao.reuniao = str(linha[self.config.coluna_reuniao-1].value).strip()
+                proposicao.relator_vista = str(linha[self.config.coluna_relatoria_vista-1].value)
+                proposicao.parecer_vista = str(linha[self.config.coluna_parecer_vista-1].value)
 
                 proposicao.linha_da_planilha = linha[0].row  #ARMAZENO A LINHA PARA DEPOIS ATUALIZAR A ORDEM NO EDITAL
 
