@@ -6,7 +6,7 @@ from pathlib import Path
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, Cm
+from docx.shared import Pt, Cm, RGBColor
 from proposicoes_bd.msaccess import conexao_msaccess
 
 
@@ -30,6 +30,7 @@ def cria_estilo(lista_estilos, nome_estilo, alinhamento, fonte, tamanho, negrito
 class Edital(Proposicao):
     lista_proposicoes: list = None
     usar_link: bool = True
+    inclui_parecer: bool = False
 
     def gera_documento(self, arquivo_modelo, diretorio_geracao, banco_dados_proposicoes):
         try:
@@ -72,16 +73,24 @@ class Edital(Proposicao):
                     self.add_hyperlink(p, texto_link, link)
 
                     p.add_run(
-                        f", do(s) Deputado(s) {proposicao.autores.title()}, que "
-                        f"{proposicao.ementa}{'' if proposicao.ementa.endswith('.') else '.'}"
+                        f', do(s) Deputado(s) {proposicao.autores.title()}, que "'
+                        f'{proposicao.ementa}"{"" if proposicao.ementa.endswith(".") else "."}'
                     )
                 else:
                     texto_link = (f"{'Emendas de Plenário ao Projeto de Lei nº ' if proposicao.emenda_de_plenario else 'Projeto de Lei nº '}" + numero_formatado)
                     p = documento.add_paragraph(f"{proposicao.ordem}) {texto_link}", style=stl_norm_just_pl16)
                     p.add_run(
-                        f", do(s) Deputado(s) {proposicao.autores.title()}, que "
-                        f"{proposicao.ementa}{'' if proposicao.ementa.endswith('.') else '.'}"
+                        f', do(s) Deputado(s) {proposicao.autores.title()}, que "'
+                        f'{proposicao.ementa}"{"" if proposicao.ementa.endswith(".") else "."}'
                     )
+
+                if self.inclui_parecer:
+                    documento.add_paragraph(f"Parecer: {proposicao.parecer}", style=stl_norm_just_pl16)
+
+                    if proposicao.parecer_vista:
+                        self.add_paragrafo_vermelho(documento,f"Voto em separado do(a) Deputado(a) {proposicao.relator_vista}: {proposicao.parecer_vista}", style=stl_norm_just_pl16)
+                        #documento.add_paragraph(f"Voto em Separado do(a) Deputado(a) {proposicao.relator_vista}: {proposicao.parecer_vista}", style=stl_norm_just_pl16)
+
 
                 documento.add_paragraph('', style=stl_norm_just_pl16)
                 relator_anterior = proposicao.relator
@@ -98,6 +107,12 @@ class Edital(Proposicao):
 
         except Exception as e:
             raise Exception(f"Verifique se a pasta ou o arquivo de modelo de Edital existe!\nDetalhes: {e}")
+
+
+    def add_paragrafo_vermelho(self, documento, texto, style):
+        p = documento.add_paragraph('', style=style)
+        run = p.add_run(texto)
+        run.font.color.rgb = RGBColor(255, 0, 0)
 
 
 @dataclass

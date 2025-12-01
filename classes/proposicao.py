@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from docx.oxml import parse_xml
 from docx.shared import Pt
-from urllib.parse import urlparse
+
 
 
 @dataclass
@@ -14,12 +14,12 @@ class Proposicao:
     texto: str = ''
     reuniao: str = ''
     relator: str = ''
-    autores: str = None
-    parecer: str = None
+    autores: str = ''
+    parecer: str = ''
     emenda_de_plenario: bool = False
-    linha_da_planilha: int = None
-    relator_vista: str = None
-    parecer_vista: str = None
+    linha_da_planilha: int = 0
+    relator_vista: str = ''
+    parecer_vista: str = ''
 
 
     def classifica_tipo_proposicao(self, nome_resumido=False):
