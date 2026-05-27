@@ -188,7 +188,7 @@ class LogCapture(io.StringIO):
 st.markdown("""
 <div class="main-header">
     <h1>📋 Gerador de Edital</h1>
-    <p>Comissão de Constituição e Justiça · ALERJ</p>
+    <p>Departamento de Apoio às Comissões Permanentes · ALERJ</p>
 </div>
 """, unsafe_allow_html=True)
 
