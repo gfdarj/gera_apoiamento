@@ -110,3 +110,7 @@ Isso instala:
 
         pyenv deactivate
 
+
+7) Executar a aplicacao web com o stramlit
+
+        streamlit run app_streamlit.py
