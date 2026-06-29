@@ -244,45 +244,87 @@ with col_gear:
 # PAINEL DE CONFIGURAÇÕES (expansível)
 # ──────────────────────────────────────────────────────────
 if st.session_state.show_config:
-    cfg = load_config()
+    # Carrega o JSON uma única vez no session_state para não resetar os campos
+    if "cfg" not in st.session_state:
+        st.session_state.cfg = load_config()
+    cfg = st.session_state.cfg
+
+    # ── Helpers: abrem explorador do Windows via tkinter ──
+    def browse_file(state_key: str, filetypes: list):
+        try:
+            import tkinter as tk
+            from tkinter import filedialog
+            root = tk.Tk()
+            root.withdraw()
+            root.wm_attributes("-topmost", True)
+            path = filedialog.askopenfilename(filetypes=filetypes)
+            root.destroy()
+            if path:
+                st.session_state.cfg[state_key] = path
+        except Exception as e:
+            st.warning(f"Não foi possível abrir o explorador: {e}")
+
+    def browse_folder(state_key: str):
+        try:
+            import tkinter as tk
+            from tkinter import filedialog
+            root = tk.Tk()
+            root.withdraw()
+            root.wm_attributes("-topmost", True)
+            path = filedialog.askdirectory()
+            root.destroy()
+            if path:
+                st.session_state.cfg[state_key] = path + "/"
+        except Exception as e:
+            st.warning(f"Não foi possível abrir o explorador: {e}")
+
+    def path_row(label: str, state_key: str, btn_key: str,
+                 filetypes=None, is_folder=False, help=None):
+        """Campo de texto + botão 📂 lado a lado."""
+        col_input, col_btn = st.columns([8, 1])
+        with col_input:
+            val = st.text_input(label, value=st.session_state.cfg.get(state_key, ""),
+                                key=f"ti_{state_key}", help=help)
+            st.session_state.cfg[state_key] = val
+        with col_btn:
+            st.markdown("""
+                <style>
+                    div[data-testid="stButton"] button[kind="secondary"] {
+                        padding: 0.4rem 0.6rem !important;
+                        min-width: 2.2rem !important;
+                        width: 100% !important;
+                    }
+                </style>
+                <div style='margin-top:1.75rem;'>
+            """, unsafe_allow_html=True)
+            if st.button("📂", key=btn_key, help="Navegar…"):
+                if is_folder:
+                    browse_folder(state_key)
+                else:
+                    browse_file(state_key, filetypes or [("Todos os arquivos", "*.*")])
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    DOCX  = [("Word",   "*.docx"),        ("Todos", "*.*")]
+    SHEET = [("Excel",  "*.xlsm *.xlsx"), ("Todos", "*.*")]
+    DB    = [("Access", "*.accdb *.mdb"), ("Todos", "*.*")]
 
     st.markdown('<div class="config-panel">', unsafe_allow_html=True)
     st.markdown("### ⚙️ Configurações do Sistema")
-    st.caption("Edite os caminhos e parâmetros abaixo. Clique em **Salvar** para gravar no `configuracao.json`.")
+    st.caption("Digite o caminho ou clique em 📂 para navegar. As alterações são **salvas automaticamente** no `configuracao.json`.")
 
     # ── Arquivos e pastas ──
     st.markdown('<p class="config-group-title">📁 Arquivos e Pastas</p>', unsafe_allow_html=True)
 
-    c1, c2 = st.columns(2)
-    with c1:
-        cfg["arquivo_planilha_de_projetos"] = st.text_input(
-            "Planilha de projetos (.xlsm / .xlsx)",
-            value=cfg["arquivo_planilha_de_projetos"],
-            help="Caminho completo ou relativo da planilha de controle.",
-        )
-        cfg["arquivo_modelo_edital"] = st.text_input(
-            "Modelo do Edital (.docx)",
-            value=cfg["arquivo_modelo_edital"],
-        )
-        cfg["arquivo_modelo_conclusao"] = st.text_input(
-            "Modelo de Conclusão (.docx)",
-            value=cfg["arquivo_modelo_conclusao"],
-        )
-    with c2:
-        cfg["diretorio_geracao"] = st.text_input(
-            "Pasta de saída dos documentos",
-            value=cfg["diretorio_geracao"],
-            help="Pasta onde os editais e conclusões serão salvos.",
-        )
-        cfg["arquivo_modelo_conclusao_voto_separado"] = st.text_input(
-            "Modelo de Voto em Separado (.docx)",
-            value=cfg["arquivo_modelo_conclusao_voto_separado"],
-        )
-        cfg["banco_dados_proposicoes"] = st.text_input(
-            "Banco de dados (.accdb / .mdb)",
-            value=cfg["banco_dados_proposicoes"],
-            help="Caminho para o banco Access com os links das proposições.",
-        )
+    path_row("Planilha de projetos (.xlsm / .xlsx)", "arquivo_planilha_de_projetos", "br_planilha",
+             filetypes=SHEET, help="Caminho completo ou relativo da planilha de controle.")
+    path_row("Pasta de saída dos documentos", "diretorio_geracao", "br_dir",
+             is_folder=True, help="Pasta onde os editais e conclusões serão salvos.")
+    path_row("Modelo do Edital (.docx)",               "arquivo_modelo_edital",                  "br_edital",    filetypes=DOCX)
+    path_row("Modelo de Conclusão (.docx)",            "arquivo_modelo_conclusao",               "br_conclusao", filetypes=DOCX)
+    path_row("Modelo de Voto em Separado (.docx)",     "arquivo_modelo_conclusao_voto_separado", "br_voto",      filetypes=DOCX)
+    path_row("Banco de dados (.accdb / .mdb)",         "banco_dados_proposicoes",                "br_banco",     filetypes=DB,
+             help="Caminho para o banco Access com os links das proposições.")
 
     # ── Planilha ──
     st.markdown('<hr class="config-divider">', unsafe_allow_html=True)
@@ -293,21 +335,25 @@ if st.session_state.show_config:
         cfg["planilha_de_projetos"] = st.text_input(
             "Nome da aba (sheet)",
             value=cfg["planilha_de_projetos"],
+            key="cfg_aba",
         )
         cfg["filtro_coluna_reuniao"] = st.text_input(
             "Filtro da coluna Reunião",
             value=cfg["filtro_coluna_reuniao"],
+            key="cfg_filtro",
             help="Valor que identifica os projetos da próxima reunião. Deixe vazio para sem filtro.",
         )
     with c4:
         cfg["presidente_comissao"] = st.text_input(
             "Presidente da Comissão",
             value=cfg["presidente_comissao"],
+            key="cfg_presidente",
             help="Nome exatamente como aparece na planilha. Será o primeiro na ordenação.",
         )
         cfg["url_base"] = st.text_input(
             "URL base do site",
             value=cfg["url_base"],
+            key="cfg_url",
         )
 
     st.markdown('<hr class="config-divider">', unsafe_allow_html=True)
@@ -338,14 +384,20 @@ if st.session_state.show_config:
         with cc2[i]:
             cfg[key] = st.number_input(lbl, min_value=1, value=int(cfg[key]), step=1, key=f"col_{key}")
 
-    # ── Salvar ──
+    # Salva automaticamente a cada interação (qualquer mudança de campo dispara rerun)
+    save_config(cfg)
+
+    # ── Botão de confirmação visual ──
     st.markdown("")
     col_s1, col_s2, col_s3 = st.columns([1, 1, 1])
     with col_s2:
-        if st.button("💾  Salvar configurações", key="btn_save_cfg"):
+        if st.button("💾  Salvar e fechar", key="btn_save_cfg"):
             save_config(cfg)
-            st.markdown('<div class="info-saved">✅ Configurações salvas em configuracao.json</div>', unsafe_allow_html=True)
+            st.session_state.show_config = False
+            st.session_state.pop("cfg", None)   # força releitura na próxima abertura
+            st.rerun()
 
+    st.markdown('<div class="info-saved">✅ Alterações salvas automaticamente no configuracao.json</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown("---")
 
